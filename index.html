@@ -3,33 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caminhos da Rosa | Oráculo</title>
+    <title>Caminhos da Rosa | Oráculo & Sabedoria</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Quicksand:wght@300;500&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root { --vinho: #4a0404; --dourado: #c5a059; --preto: #0a0a0a; --cinza: #1a1a1a; --texto: #f5f5f5; }
+        
         body { background-color: var(--preto); color: var(--texto); font-family: 'Quicksand', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         h1, h3, h4 { font-family: 'Cinzel', serif; color: var(--dourado); text-transform: uppercase; text-align: center; letter-spacing: 2px; }
+        
         header { padding: 2rem; width: 100%; border-bottom: 1px solid var(--dourado); background: #1a0202; text-align: center; box-sizing: border-box; }
-        .container { width: 100%; max-width: 500px; padding: 20px; box-sizing: border-box; }
-        .section-box { background: var(--cinza); padding: 25px; border-radius: 15px; border: 1px solid #333; margin-bottom: 25px; box-sizing: border-box; width: 100%; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         
+        .container { width: 100%; max-width: 550px; padding: 20px; box-sizing: border-box; }
+        
+        .section-box { 
+            background: var(--cinza); padding: 25px; border-radius: 15px; border: 1px solid #333; 
+            margin-bottom: 25px; box-sizing: border-box; width: 100%; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
+        }
+
         /* Oráculo */
-        .roses { display: flex; justify-content: space-around; font-size: 3rem; margin: 20px 0; }
+        .roses { display: flex; justify-content: space-around; font-size: 3.5rem; margin: 20px 0; }
         .rose { cursor: pointer; transition: 0.3s; }
-        .rose:hover { transform: scale(1.1); }
+        .rose:hover { transform: scale(1.1); filter: drop-shadow(0 0 10px var(--dourado)); }
         #msg-display { display: none; padding: 20px; background: rgba(74, 4, 4, 0.6); border-radius: 8px; border-left: 4px solid var(--dourado); margin-top: 15px; font-style: italic; text-align: center; line-height: 1.6; }
-        
-        /* Formulários e Botões */
+
+        /* Formulários e Inputs */
         .quiz-opt { width: 100%; padding: 14px; margin: 10px 0; background: #222; color: white; border: 1px solid #444; border-radius: 10px; font-family: inherit; box-sizing: border-box; display: block; font-size: 1rem; }
         .btn-main { background: var(--dourado); color: var(--preto); border: none; padding: 16px; width: 100%; font-weight: bold; border-radius: 30px; cursor: pointer; text-transform: uppercase; font-family: 'Cinzel', serif; margin-top: 10px; box-sizing: border-box; transition: 0.3s; }
         .btn-main:hover { background: #d4ae6a; }
-        .privacy-box { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.85rem; color: #aaa; margin: 15px 0; width: 100%; }
+
+        /* Enciclopédia */
+        #detalhes-pombagira { display: none; text-align: left; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px; margin-top: 15px; border-top: 2px solid var(--dourado); }
+        .info-label { color: var(--dourado); font-weight: bold; font-size: 0.8rem; text-transform: uppercase; }
 
         /* Rodapé */
         footer { margin-top: auto; padding: 3rem 1rem; width: 100%; background: #050505; border-top: 1px solid #222; text-align: center; box-sizing: border-box; }
         .footer-social { display: flex; justify-content: center; gap: 20px; margin-top: 15px; }
-        .footer-social a { color: var(--dourado); text-decoration: none; font-size: 0.9rem; font-weight: bold; border: 1px solid var(--dourado); padding: 8px 18px; border-radius: 5px; transition: 0.3s; }
+        .footer-social a { color: var(--dourado); text-decoration: none; font-size: 0.85rem; font-weight: bold; border: 1px solid var(--dourado); padding: 8px 18px; border-radius: 5px; transition: 0.3s; }
         .footer-social a:hover { background: var(--dourado); color: var(--preto); }
     </style>
 </head>
@@ -39,7 +50,7 @@
 
     <div class="container">
         <div class="section-box">
-            <p style="text-align:center; font-size: 1rem; color: var(--dourado);">Sinta a energia e toque em uma rosa:</p>
+            <p style="text-align:center; font-size: 1rem; color: var(--dourado);">Mentalize sua questão e toque em uma rosa:</p>
             <div class="roses">
                 <span class="rose" onclick="obterMensagem('vermelha')">🌹</span>
                 <span class="rose" onclick="obterMensagem('preta')">🥀</span>
@@ -52,25 +63,51 @@
             <h3>Regência do Dia</h3>
             <div id="quiz-content">
                 <p style="text-align:center; font-size: 0.9rem; color: #bbb; margin-bottom: 20px;">Qual arquétipo guia seus passos hoje?</p>
-                <button class="btn-main" onclick="carregarQuiz()">Consultar</button>
+                <button class="btn-main" onclick="carregarQuiz()">Iniciar Consulta</button>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <h3>As Senhoras do Caminho</h3>
+            <select id="select-pombagira" class="quiz-opt" onchange="mostrarDetalhesPombagira()">
+                <option value="">Conheça as Pombagiras...</option>
+                <option value="padilha">Maria Padilha</option>
+                <option value="mulambo">Maria Mulambo</option>
+                <option value="quiteria">Maria Quitéria</option>
+                <option value="caveira">Rosa Caveira</option>
+                <option value="dama">Dama da Noite</option>
+                <option value="saias">Sete Saias</option>
+                <option value="cigana">Cigana</option>
+                <option value="navalha">Maria Navalha</option>
+                <option value="praia">Pombagira da Praia</option>
+                <option value="farrapo">Maria Farrapo</option>
+                <option value="menina">Pombagira Menina</option>
+                <option value="figueira">Pombagira da Figueira</option>
+            </select>
+
+            <div id="detalhes-pombagira">
+                <h4 id="pg-titulo" style="text-align: left; margin-top:0;"></h4>
+                <p id="pg-desc" style="font-size: 0.95rem; line-height: 1.6; color: #eee;"></p>
+                <p><span class="info-label">Dia:</span> <span id="pg-dia"></span></p>
+                <p><span class="info-label">Cores:</span> <span id="pg-cores"></span></p>
+                <p><span class="info-label">Oferendas:</span> <span id="pg-oferendas"></span></p>
+                <p><span class="info-label">Energia:</span> <span id="pg-energia"></span></p>
             </div>
         </div>
 
         <div class="section-box" id="area-testemunhos" style="display:none;">
             <h3>Vozes de Axé</h3>
-            <div id="lista-depoimentos" style="text-align: left;"></div>
+            <div id="lista-depoimentos"></div>
         </div>
 
         <div class="section-box">
             <h3>Relate sua Graça</h3>
             <input type="text" id="depo-nome" placeholder="Seu nome" class="quiz-opt">
             <textarea id="depo-msg" placeholder="Como as Moças te ajudaram?" class="quiz-opt" style="height:100px; resize: none;"></textarea>
-            
-            <div class="privacy-box">
-                <input type="checkbox" id="depo-publico" checked>
+            <div style="display:flex; align-items:center; gap:10px; font-size:0.8rem; color:#888; margin:10px 0;">
+                <input type="checkbox" id="depo-publico" checked> 
                 <label for="depo-publico">Autorizo publicar este relato na grade.</label>
             </div>
-            
             <button class="btn-main" onclick="enviarDepoimento()">Enviar para a Grade</button>
         </div>
     </div>
@@ -81,7 +118,7 @@
             <a id="share-wa" href="#" target="_blank">WhatsApp</a>
             <a id="share-tg" href="#" target="_blank">Telegram</a>
         </div>
-        <p style="margin-top:25px; font-size: 0.75rem; opacity: 0.5; letter-spacing: 1px;">Laroyê, Minha Senhora! ✨ 2026</p>
+        <p style="margin-top:25px; font-size: 0.75rem; opacity: 0.5;">Laroyê, Minha Senhora! ✨ 2026</p>
     </footer>
 
     <script>
@@ -89,24 +126,52 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJieWd4a2Jld3prbnZqamh4ZHZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwMDcxNjQsImV4cCI6MjA4MTU4MzE2NH0.YrHF9HEGo6yv9MyNsPzFgBhaAB1DRh2SLU8f7L6s1nY';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        async function iniciar() {
-            // Contador de Visitas
+        // --- BANCO DE DADOS DA ENCICLOPÉDIA ---
+        const dadosPombagiras = {
+            padilha: { titulo: "Maria Padilha", energia: "Comando / Realeza", dia: "Sexta-feira", cores: "Vermelho, Dourado, Preto", oferendas: "Champanhe, rosas vermelhas, perfumes caros.", desc: "Soberana das encruzilhadas, Maria Padilha rege com autoridade e elegância. É a senhora do comando, justiça e das paixões avassaladoras." },
+            mulambo: { titulo: "Maria Mulambo", energia: "Cura / Humildade", dia: "Segunda ou Quarta-feira", cores: "Branco, Verde-claro, Cinza", oferendas: "Velas brancas, flores do campo, mel, ervas.", desc: "Maria Mulambo transforma trapos em ouro espiritual. É a senhora da cura física e da alma, acolhendo os abandonados com amor e resiliência." },
+            quiteria: { titulo: "Maria Quitéria", energia: "Guerra / Proteção", dia: "Terça-feira", cores: "Vermelho, Marrom, Preto", oferendas: "Velas vermelhas, cerveja preta, pimenta.", desc: "Guerreira implacável, protege contra inimigos e dá coragem para enfrentar batalhas pessoais. Sua energia é de força e determinação." },
+            caveira: { titulo: "Rosa Caveira", energia: "Justiça / Transformação", dia: "Sábado", cores: "Preto, Vermelho-sangue, Roxo", oferendas: "Velas pretas, vinho tinto, moedas.", desc: "Trabalha no limite entre a vida e a morte. Rosa Caveira traz justiça rigorosa e a transformação necessária para quem precisa renascer." },
+            dama: { titulo: "Dama da Noite", energia: "Mistério / Oculto", dia: "Sexta-feira (Noite)", cores: "Preto, Roxo, Azul-escuro", oferendas: "Dama-da-noite (flor), incenso de mirra, vinho.", desc: "Senhora dos segredos e da magia oculta. Ela ajuda a desvendar verdades escondidas e protege o conhecimento sagrado." },
+            saias: { titulo: "Sete Saias", energia: "Alegria / Intensidade", dia: "Quinta ou Domingo", cores: "Multicolorido", oferendas: "Doces, frutas, música, fitas coloridas.", desc: "A alegria em forma de espírito. Traz movimento, paixão e fertilidade, limpando a tristeza com sua dança contagiante." },
+            cigana: { titulo: "Pombagira Cigana", energia: "Liberdade / Prosperidade", dia: "Quarta-feira", cores: "Vermelho, Dourado, Verde", oferendas: "Moedas, joias, baralho, vinho doce.", desc: "Dona da estrada e da sorte. Abre caminhos para a prosperidade material e traz a liberdade para quem se sente aprisionado." },
+            navalha: { titulo: "Maria Navalha", energia: "Malandragem / Rua", dia: "Terça ou Sexta", cores: "Preto, Vermelho, Prata", oferendas: "Cerveja, cigarro, dinheiro, navalhas.", desc: "Protetora dos caminhos urbanos e da sobrevivência. Maria Navalha traz astúcia e defesa contra perigos iminentes." },
+            praia: { titulo: "Pombagira da Praia", energia: "Emoção / Limpeza", dia: "Quinta ou Segunda", cores: "Azul, Branco, Prata", oferendas: "Champanhe rosé, conchas, perfumes suaves.", desc: "Senhora das águas que lavam a alma. Trabalha no equilíbrio das emoções e na purificação espiritual profunda." },
+            farrapo: { titulo: "Maria Farrapo", energia: "Sanidade / Equilíbrio Mental", dia: "Segunda-feira", cores: "Branco sujo, Cinza, Lilás", oferendas: "Velas brancas, lavanda, água com sal.", desc: "Atua no caos mental para trazer clareza. Ajuda a reconstruir a mente após traumas e confusões espirituais." },
+            menina: { titulo: "Pombagira Menina", energia: "Renovação / Inocência", dia: "Domingo", cores: "Rosa, Branco, Azul-claro", oferendas: "Doces, balas, brinquedos, flores brancas.", desc: "A energia do recomeço e da esperança. Protege novos projetos e traz leveza para situações pesadas." },
+            figueira: { titulo: "Pombagira da Figueira", energia: "Raiz / Ancestralidade", dia: "Sábado", cores: "Marrom, Verde-escuro, Preto", oferendas: "Folhas de figueira, mel, sementes.", desc: "Guardiã das raízes e dos antepassados. Traz estabilidade familiar e conexão com as forças da terra." }
+        };
+
+        // --- FUNÇÕES DO SITE ---
+        async function iniciarSite() {
             const { data: v } = await _supabase.rpc('increment_page_view', { target_page: 'pombagiras' });
             if(v) document.getElementById('view-counter').innerText = `${v} caminhos cruzados por aqui`;
-
             carregarDepoimentos();
             configurarCompartilhamento();
         }
 
-        // ORÁCULO
+        function mostrarDetalhesPombagira() {
+            const id = document.getElementById('select-pombagira').value;
+            const div = document.getElementById('detalhes-pombagira');
+            if(id && dadosPombagiras[id]) {
+                const info = dadosPombagiras[id];
+                document.getElementById('pg-titulo').innerText = info.titulo;
+                document.getElementById('pg-desc').innerText = info.desc;
+                document.getElementById('pg-dia').innerText = info.dia;
+                document.getElementById('pg-cores').innerText = info.cores;
+                document.getElementById('pg-oferendas').innerText = info.oferendas;
+                document.getElementById('pg-energia').innerText = info.energia;
+                div.style.display = 'block';
+            } else { div.style.display = 'none'; }
+        }
+
         async function obterMensagem(cor) {
             const display = document.getElementById('msg-display');
             display.style.display = 'block';
             let { data } = await _supabase.from('mensagens_oraculo').select('texto').eq('cor_rosa', cor).eq('ativa', true);
-            if(data && data.length > 0) document.getElementById('msg-text').innerText = data[Math.floor(Math.random() * data.length)].texto;
+            if(data) document.getElementById('msg-text').innerText = data[Math.floor(Math.random() * data.length)].texto;
         }
 
-        // QUIZ
         let perguntas = [], etapa = 0, pontos = { rainha: 0, cigana: 0, calunga: 0 };
         async function carregarQuiz() {
             let { data } = await _supabase.from('perguntas_quiz').select('*').eq('ativa', true);
@@ -116,28 +181,29 @@
             const area = document.getElementById('quiz-content');
             if (etapa < perguntas.length) {
                 let p = perguntas[etapa];
-                area.innerHTML = `<p style="text-align:center; font-size:1rem; margin-bottom:15px;">${p.pergunta}</p>` + 
+                area.innerHTML = `<p style="text-align:center;">${p.pergunta}</p>` + 
                 ['a','b','c'].map(l => `<button class="quiz-opt" onclick="votar('${p['ponto_'+l]}')">${p['opcao_'+l]}</button>`).join('');
             } else { finalizarQuiz(); }
         }
         function votar(p) { pontos[p]++; etapa++; mostrarPergunta(); }
+        
         function finalizarQuiz() {
             let res = Object.keys(pontos).reduce((a, b) => pontos[a] > pontos[b] ? a : b);
-            document.getElementById('quiz-content').innerHTML = `<h4>Sua regência: ${res.toUpperCase()}</h4><button class="btn-main" onclick="carregarQuiz()">Refazer Consulta</button>`;
+            const msg = {
+                rainha: "A Rainha rege seu dia. Tempo de assumir o comando e não aceitar menos do que merece.",
+                cigana: "A Cigana pede movimento. Liberdade e alegria são suas chaves hoje. Siga a estrada!",
+                calunga: "A Calunga pede silêncio e proteção. Deixe morrer o que não serve mais para renascer."
+            };
+            document.getElementById('quiz-content').innerHTML = `<h4>Regência: ${res.toUpperCase()}</h4><p style="font-style:italic; text-align:center;">${msg[res]}</p><button class="btn-main" onclick="carregarQuiz()">Refazer</button>`;
         }
 
-        // DEPOIMENTOS
         async function enviarDepoimento() {
             const nome = document.getElementById('depo-nome').value;
             const msg = document.getElementById('depo-msg').value;
-            const publico = document.getElementById('depo-publico').checked;
-            if(!nome || !msg) return alert("Por favor, preencha nome e mensagem.");
-            
-            const { error } = await _supabase.from('depoimentos').insert([{ nome, mensagem: msg, aprovado: false }]);
-            if(!error) {
-                alert("Gratidão! Seu relato foi enviado para as Moças e passará por aprovação.");
-                document.getElementById('depo-nome').value = ''; document.getElementById('depo-msg').value = '';
-            }
+            if(!nome || !msg) return alert("Preencha os campos.");
+            await _supabase.from('depoimentos').insert([{ nome, mensagem: msg, aprovado: false }]);
+            alert("Gratidão! Seu relato foi enviado para moderação.");
+            document.getElementById('depo-nome').value = ''; document.getElementById('depo-msg').value = '';
         }
 
         async function carregarDepoimentos() {
@@ -150,12 +216,11 @@
 
         function configurarCompartilhamento() {
             const url = encodeURIComponent(window.location.href);
-            const txt = encodeURIComponent("Veja seu conselho no site Caminhos da Rosa! 🌹✨");
-            document.getElementById('share-wa').href = `https://api.whatsapp.com/send?text=${txt}%20${url}`;
-            document.getElementById('share-tg').href = `https://t.me/share/url?url=${url}&text=${txt}`;
+            document.getElementById('share-wa').href = `https://api.whatsapp.com/send?text=Receba seu conselho no Caminhos da Rosa: ${url}`;
+            document.getElementById('share-tg').href = `https://t.me/share/url?url=${url}&text=Receba seu conselho no Caminhos da Rosa!`;
         }
 
-        iniciar();
+        iniciarSite();
     </script>
 </body>
 </html>
