@@ -8,88 +8,30 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root { --vinho: #4a0404; --dourado: #c5a059; --preto: #0a0a0a; --cinza: #1a1a1a; --texto: #f5f5f5; }
-        
-        body { 
-            background-color: var(--preto); 
-            color: var(--texto); 
-            font-family: 'Quicksand', sans-serif; 
-            margin: 0; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            min-height: 100vh; 
-        }
-
-        h1, h3, h4 { font-family: 'Cinzel', serif; color: var(--dourado); text-transform: uppercase; letter-spacing: 2px; }
-        
-        header { padding: 2rem; width: 100%; border-bottom: 1px solid var(--dourado); background: #1a0202; text-align: center; }
-        h1 { font-size: 1.5rem; margin: 0; }
-
+        body { background-color: var(--preto); color: var(--texto); font-family: 'Quicksand', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        h1, h3, h4 { font-family: 'Cinzel', serif; color: var(--dourado); text-transform: uppercase; text-align: center; }
+        header { padding: 2rem; width: 100%; border-bottom: 1px solid var(--dourado); background: #1a0202; text-align: center; box-sizing: border-box; }
         .container { width: 100%; max-width: 500px; padding: 20px; box-sizing: border-box; }
+        .section-box { background: var(--cinza); padding: 20px; border-radius: 15px; border: 1px solid #333; margin-bottom: 25px; box-sizing: border-box; width: 100%; }
         
-        .section-box { 
-            background: var(--cinza); 
-            padding: 25px; 
-            border-radius: 15px; 
-            border: 1px solid #333; 
-            margin-bottom: 25px; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.6); 
-        }
-
+        /* Oráculo e Rosas */
         .roses { display: flex; justify-content: space-around; font-size: 3rem; margin: 20px 0; }
-        .rose { cursor: pointer; transition: transform 0.3s; }
-        .rose:hover { transform: scale(1.1); filter: drop-shadow(0 0 8px var(--dourado)); }
-
-        #msg-display { 
-            display: none; padding: 20px; background: rgba(74, 4, 4, 0.6); 
-            border-radius: 8px; border-left: 4px solid var(--dourado); 
-            margin: 15px 0; font-style: italic; line-height: 1.6;
-        }
-
-        /* Botão Like Minimalista */
-        .btn-like-minimal {
-            background: rgba(255,255,255,0.05); border: 1px solid #444; color: #999;
-            padding: 8px 20px; border-radius: 30px; cursor: pointer;
-            font-size: 0.8rem; transition: 0.3s; margin: 10px auto; display: block;
-        }
-        .btn-like-minimal:hover, .btn-like-minimal.active { border-color: var(--dourado); color: var(--dourado); background: rgba(197, 160, 89, 0.1); }
-
-        .btn-main { 
-            background: var(--dourado); color: var(--preto); border: none; 
-            padding: 16px; width: 100%; font-weight: bold; border-radius: 30px; 
-            cursor: pointer; text-transform: uppercase; font-family: 'Cinzel', serif;
-            letter-spacing: 1px; transition: 0.3s;
-        }
-        .btn-main:hover { background: #e2bd7a; transform: translateY(-2px); }
-
-        .quiz-opt { 
-            display: block; width: 100%; padding: 14px; margin: 10px 0; 
-            background: #222; color: white; border: 1px solid #444; border-radius: 10px; 
-            font-family: inherit; cursor: pointer; transition: 0.3s;
-        }
-        .quiz-opt:hover { border-color: var(--dourado); }
-
-        /* Rodapé visível */
-        footer { 
-            margin-top: auto; padding: 3rem 1rem; width: 100%; 
-            background: #050505; border-top: 1px solid #222; text-align: center;
-        }
-        #view-counter { color: var(--dourado); font-size: 0.85rem; margin-bottom: 15px; font-weight: 500; }
+        .rose { cursor: pointer; transition: 0.3s; }
+        #msg-display { display: none; padding: 15px; background: rgba(74, 4, 4, 0.6); border-radius: 8px; border-left: 4px solid var(--dourado); margin-bottom: 15px; font-style: italic; text-align: center; }
         
-        .footer-social { display: flex; justify-content: center; gap: 25px; }
-        .footer-social a { 
-            color: #f5f5f5; text-decoration: none; font-size: 0.9rem; 
-            font-weight: 500; padding: 5px 12px; border: 1px solid #333; border-radius: 5px;
-            transition: 0.3s;
-        }
-        .footer-social a:hover { color: var(--dourado); border-color: var(--dourado); }
+        /* Botão de Curtir (Saravás) */
+        .btn-like-minimal { background: rgba(255,255,255,0.05); border: 1px solid #444; color: #999; padding: 8px 20px; border-radius: 30px; cursor: pointer; font-size: 0.8rem; display: block; margin: 0 auto; transition: 0.3s; }
+        .btn-like-minimal.active { border-color: var(--dourado); color: var(--dourado); background: rgba(197, 160, 89, 0.1); }
 
-        .privacy-box { 
-            display: flex; align-items: center; justify-content: center; 
-            gap: 10px; font-size: 0.8rem; color: #888; margin: 15px 0; 
-        }
-        input[type="checkbox"] { accent-color: var(--dourado); }
+        /* Formulário Ajustado (Fim do "torto") */
+        .quiz-opt { width: 100%; padding: 14px; margin: 10px 0; background: #222; color: white; border: 1px solid #444; border-radius: 10px; font-family: inherit; box-sizing: border-box; display: block; }
+        .btn-main { background: var(--dourado); color: var(--preto); border: none; padding: 16px; width: 100%; font-weight: bold; border-radius: 30px; cursor: pointer; text-transform: uppercase; font-family: 'Cinzel', serif; margin-top: 10px; box-sizing: border-box; }
+        .privacy-box { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.8rem; color: #888; margin: 15px 0; width: 100%; }
 
+        /* Rodapé e Links */
+        footer { margin-top: auto; padding: 2rem 1rem; width: 100%; background: #050505; border-top: 1px solid #222; text-align: center; box-sizing: border-box; }
+        .footer-social { display: flex; justify-content: center; gap: 20px; margin-top: 15px; }
+        .footer-social a { color: var(--dourado); text-decoration: none; font-size: 0.9rem; font-weight: bold; border: 1px solid var(--dourado); padding: 8px 15px; border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -98,37 +40,20 @@
 
     <div class="container">
         <div class="section-box">
-            <p style="font-size: 0.9rem; letter-spacing: 1px;">Sinta a energia e toque em uma rosa:</p>
+            <p style="text-align:center; font-size: 0.9rem;">Sinta a energia e toque em uma rosa:</p>
             <div class="roses">
                 <span class="rose" onclick="obterMensagem('vermelha')">🌹</span>
                 <span class="rose" onclick="obterMensagem('preta')">🥀</span>
                 <span class="rose" onclick="obterMensagem('amarela')">🌻</span>
             </div>
-            
             <div id="msg-display"><span id="msg-text"></span></div>
-            
-            <button class="btn-like-minimal" onclick="darLike()" id="btn-like">
-                ❤️ <span id="like-count">...</span> SARAVÁS
-            </button>
-        </div>
-
-        <div class="section-box" id="quiz-area">
-            <h3>Regência do Dia</h3>
-            <div id="quiz-content">
-                <p style="font-size: 0.9rem; color: #bbb;">Qual arquétipo guia seus passos hoje?</p>
-                <button class="btn-main" onclick="carregarQuiz()">Consultar</button>
-            </div>
-        </div>
-
-        <div class="section-box" id="area-testemunhos" style="display:none;">
-            <h3>Vozes de Axé</h3>
-            <div id="lista-depoimentos" style="text-align: left;"></div>
+            <button class="btn-like-minimal" onclick="darLike()" id="btn-like">❤️ <span id="like-count">...</span> SARAVÁS</button>
         </div>
 
         <div class="section-box">
             <h3>Relate sua Graça</h3>
             <input type="text" id="depo-nome" placeholder="Seu nome" class="quiz-opt">
-            <textarea id="depo-msg" placeholder="Como as Moças te ajudaram?" class="quiz-opt" style="height:80px;"></textarea>
+            <textarea id="depo-msg" placeholder="Como as Moças te ajudaram?" class="quiz-opt" style="height:100px; resize: none;"></textarea>
             
             <div class="privacy-box">
                 <input type="checkbox" id="depo-publico" checked>
@@ -140,12 +65,12 @@
     </div>
 
     <footer>
-        <div id="view-counter">Cruzando caminhos...</div>
+        <div id="view-counter" style="color:var(--dourado); margin-bottom:10px;">...</div>
         <div class="footer-social">
             <a id="share-wa" href="#" target="_blank">WhatsApp</a>
             <a id="share-tg" href="#" target="_blank">Telegram</a>
         </div>
-        <p style="margin-top:25px; font-size: 0.7rem; opacity: 0.4; letter-spacing: 2px;">Laroyê, Minha Senhora! ✨ 2026</p>
+        <p style="margin-top:20px; font-size: 0.7rem; opacity: 0.4;">Laroyê, Minha Senhora! ✨ 2026</p>
     </footer>
 
     <script>
@@ -158,21 +83,19 @@
             const { data: v } = await _supabase.rpc('increment_page_view', { target_page: 'pombagiras' });
             if(v) document.getElementById('view-counter').innerText = `${v} caminhos cruzados por aqui`;
 
-            // Likes (Usa o ID que está no seu print: trans-pride-main)
+            // Likes (Usando o ID do seu print)
             const { data: l } = await _supabase.from('page_likes').select('likes').eq('page_id', 'trans-pride-main').single();
             if(l) document.getElementById('like-count').innerText = l.likes;
 
-            carregarDepoimentos();
-            configurarLinks();
+            configurarCompartilhamento();
         }
 
         async function darLike() {
-            const btn = document.getElementById('btn-like');
+            // Chamando a função que você rodou no SQL Editor
             const { data, error } = await _supabase.rpc('increment_page_like', { target_page: 'trans-pride-main' });
             if(!error) {
                 document.getElementById('like-count').innerText = data;
-                btn.classList.add('active');
-                if(window.navigator.vibrate) window.navigator.vibrate(50);
+                document.getElementById('btn-like').classList.add('active');
             }
         }
 
@@ -183,44 +106,18 @@
             if(data) document.getElementById('msg-text').innerText = data[Math.floor(Math.random() * data.length)].texto;
         }
 
-        let perguntas = [], etapa = 0, pontos = { rainha: 0, cigana: 0, calunga: 0 };
-        async function carregarQuiz() {
-            let { data } = await _supabase.from('perguntas_quiz').select('*').eq('ativa', true);
-            if(data) { perguntas = data; etapa = 0; pontos = { rainha: 0, cigana: 0, calunga: 0 }; proxima(); }
-        }
-        function proxima() {
-            const area = document.getElementById('quiz-content');
-            if (etapa < perguntas.length) {
-                let p = perguntas[etapa];
-                area.innerHTML = `<p style="margin-bottom:15px;">${p.pergunta}</p>` + 
-                ['a','b','c'].map(l => `<button class="quiz-opt" onclick="votar('${p['ponto_'+l]}')">${p['opcao_'+l]}</button>`).join('');
-            } else { 
-                let res = Object.keys(pontos).reduce((a, b) => pontos[a] > pontos[b] ? a : b);
-                area.innerHTML = `<h4>Sua regência: ${res.toUpperCase()}</h4><button class="btn-main" onclick="carregarQuiz()">Refazer</button>`;
-            }
-        }
-        function votar(p) { pontos[p]++; etapa++; proxima(); }
-
         async function enviarDepoimento() {
             const nome = document.getElementById('depo-nome').value;
             const msg = document.getElementById('depo-msg').value;
             if(!nome || !msg) return alert("Preencha os campos.");
-            await _supabase.from('depoimentos').insert([{ nome, mensagem: msg }]);
-            alert("Gratidão! Seu relato foi enviado para moderação.");
+            await _supabase.from('depoimentos').insert([{ nome, mensagem: msg, aprovado: false }]);
+            alert("Sua graça foi enviada para moderação. Gratidão!");
             document.getElementById('depo-nome').value = ''; document.getElementById('depo-msg').value = '';
         }
 
-        async function carregarDepoimentos() {
-            let { data } = await _supabase.from('depoimentos').select('nome, mensagem').eq('aprovado', true).order('criado_em', { ascending: false });
-            if (data && data.length > 0) {
-                document.getElementById('area-testemunhos').style.display = 'block';
-                document.getElementById('lista-depoimentos').innerHTML = data.map(d => `<div style="border-bottom:1px solid #333; padding:15px 0;"><strong>${d.nome}</strong><br><em style="color:#aaa; font-size:0.85rem;">"${d.mensagem}"</em></div>`).join('');
-            }
-        }
-
-        function configurarLinks() {
+        function configurarCompartilhamento() {
             const url = encodeURIComponent(window.location.href);
-            const txt = encodeURIComponent("Encontrei um oráculo incrível! Veja o seu conselho das Pombagiras: ");
+            const txt = encodeURIComponent("Receba seu conselho das Pombagiras: ");
             document.getElementById('share-wa').href = `https://api.whatsapp.com/send?text=${txt}%20${url}`;
             document.getElementById('share-tg').href = `https://t.me/share/url?url=${url}&text=${txt}`;
         }
