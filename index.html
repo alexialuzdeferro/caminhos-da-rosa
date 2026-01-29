@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caminhos da Rosa | Real-Time</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root { --vinho: #4a0404; --dourado: #c5a059; --preto: #0a0a0a; --texto: #f5f5f5; }
+        body { background: var(--preto); color: var(--texto); font-family: 'Georgia', serif; margin: 0; text-align: center; }
+        header { padding: 2rem; border-bottom: 1px solid var(--dourado); background: #1a0202; }
+        h1 { color: var(--dourado); letter-spacing: 3px; text-transform: uppercase; font-size: 1.5rem; }
+        .container { padding: 20px; max-width: 500px; margin: auto; }
+        .section-box { background: #1a1a1a; padding: 20px; border-radius: 15px; border: 1px solid #333; margin-bottom: 20px; }
+        .roses { display: flex; justify-content: space-around; font-size: 3.5rem; margin: 20px 0; }
+        .rose { cursor: pointer; transition: 0.3s; }
+        .rose:active { transform: scale(0.8); }
+        #msg-display { display: none; padding: 15px; background: rgba(74, 4, 4, 0.5); border-left: 3px solid var(--dourado); margin-top: 15px; }
+        .btn-main { background: var(--dourado); color: var(--preto); border: none; padding: 15px; width: 100%; font-weight: bold; border-radius: 25px; cursor: pointer; margin-top: 10px; }
+        .quiz-opt { display: block; width: 100%; padding: 10px; margin: 5px 0; background: transparent; color: white; border: 1px solid var(--dourado); border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+<header><h1>Caminhos da Rosa</h1></header>
+
+<div class="container">
+    <div class="section-box">
+        <p style="color:var(--dourado)">Toque em uma rosa para sua mensagem:</p>
+        <div class="roses">
+            <span class="rose" onclick="obterMensagem('vermelha')">🌹</span>
+            <span class="rose" onclick="obterMensagem('preta')">🥀</span>
+            <span class="rose" onclick="obterMensagem('amarela')">🌻</span>
+        </div>
+        <div id="msg-display"><em id="msg-text">Carregando sabedoria...</em></div>
+    </div>
+
+    <div class="section-box" id="quiz-area">
+        <h3 style="color:var(--dourado)">Regência Atual</h3>
+        <div id="quiz-content">
+            <button class="btn-main" onclick="carregarQuiz()">Descobrir minha energia</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // CONFIGURAÇÃO SUPABASE
+    const SUPABASE_URL = 'https://rbygxkbewzknvjjhxdvw.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJieWd4a2Jld3prbnZqamh4ZHZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwMDcxNjQsImV4cCI6MjA4MTU4MzE2NH0.YrHF9HEGo6yv9MyNsPzFgBhaAB1DRh2SLU8f7L6s1nY';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // FUNÇÃO ORÁCULO DINÂMICO
+    async function obterMensagem(cor) {
+        const display = document.getElementById('msg-display');
+        const texto = document.getElementById('msg-text');
+        display.style.display = 'block';
+        texto.innerText = "Consultando as Moças...";
+
+        let { data, error } = await _supabase
+            .from('mensagens_oraculo')
+            .select('texto')
+            .eq('cor_rosa', cor)
+            .eq('ativa', true);
+
+        if (data && data.length > 0) {
+            const sorteada = data[Math.floor(Math.random() * data.length)];
+            texto.innerText = sorteada.texto;
+        }
+        if(window.navigator.vibrate) window.navigator.vibrate(50);
+    }
+
+    // FUNÇÃO QUIZ DINÂMICO
+    let perguntas = [];
+    let etapa = 0;
+    let pontos = { rainha: 0, cigana: 0, calunga: 0 };
+
+    async function carregarQuiz() {
+        let { data } = await _supabase.from('perguntas_quiz').select('*').eq('ativa', true);
+        perguntas = data;
+        etapa = 0;
+        pontos = { rainha: 0, cigana: 0, calunga: 0 };
+        proximaPergunta();
+    }
+
+    function proximaPergunta() {
+        const area = document.getElementById('quiz-content');
+        if (etapa < perguntas.length) {
+            let p = perguntas[etapa];
+            area.innerHTML = `
+                <p><strong>${p.pergunta}</strong></p>
+                <button class="quiz-opt" onclick="votar('${p.ponto_a}')">${p.opcao_a}</button>
+                <button class="quiz-opt" onclick="votar('${p.ponto_b}')">${p.opcao_b}</button>
+                <button class="quiz-opt" onclick="votar('${p.ponto_c}')">${p.opcao_c}</button>
+            `;
+        } else {
+            finalizar();
+        }
+    }
+
+    function votar(p) { pontos[p]++; etapa++; proximaPergunta(); }
+
+    function finalizar() {
+        let res = Object.keys(pontos).reduce((a, b) => pontos[a] > pontos[b] ? a : b);
+        document.getElementById('quiz-content').innerHTML = `<h4>Sua energia atual é: ${res.toUpperCase()}</h4><button class="btn-main" onclick="carregarQuiz()">Refazer</button>`;
+    }
+</script>
+</body>
+</html>
