@@ -3,23 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caminhos da Rosa | Oráculo & Comunidade</title>
+    <title>Caminhos da Rosa | Oráculo</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root { --vinho: #4a0404; --dourado: #c5a059; --preto: #0a0a0a; --cinza: #1a1a1a; --texto: #f5f5f5; }
         body { background-color: var(--preto); color: var(--texto); font-family: 'Georgia', serif; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; text-align: center; }
         header { padding: 2rem; width: 100%; border-bottom: 1px solid var(--dourado); background: #1a0202; }
-        h1 { color: var(--dourado); letter-spacing: 3px; text-transform: uppercase; font-size: 1.5rem; margin: 0; }
+        h1 { color: var(--dourado); letter-spacing: 3px; text-transform: uppercase; font-size: 1.4rem; margin: 0; }
         .container { width: 100%; max-width: 500px; padding: 20px; box-sizing: border-box; }
-        .section-box { background: var(--cinza); padding: 20px; border-radius: 15px; border: 1px solid #333; margin-bottom: 25px; }
-        .roses { display: flex; justify-content: space-around; font-size: 3.5rem; margin: 20px 0; }
+        .section-box { background: var(--cinza); padding: 20px; border-radius: 15px; border: 1px solid #333; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .roses { display: flex; justify-content: space-around; font-size: 3rem; margin: 20px 0; }
         .rose { cursor: pointer; transition: 0.3s; }
         .rose:active { transform: scale(0.8); }
-        #msg-display { display: none; padding: 15px; background: rgba(74, 4, 4, 0.5); border-left: 3px solid var(--dourado); margin-top: 15px; font-style: italic; }
-        .btn-main { background: var(--dourado); color: var(--preto); border: none; padding: 15px; width: 100%; font-weight: bold; border-radius: 25px; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
-        .quiz-opt { display: block; width: 100%; padding: 12px; margin: 8px 0; background: #222; color: white; border: 1px solid var(--dourado); border-radius: 8px; }
-        .share-btn { font-size: 1.8rem; text-decoration: none; margin: 0 10px; }
-        footer { margin-top: auto; padding: 2rem; color: var(--dourado); font-size: 0.8rem; opacity: 0.6; }
+        #msg-display { display: none; padding: 15px; background: rgba(74, 4, 4, 0.4); border-left: 3px solid var(--dourado); margin-top: 15px; font-style: italic; font-size: 0.95rem; }
+        .btn-main { background: var(--dourado); color: var(--preto); border: none; padding: 14px; width: 100%; font-weight: bold; border-radius: 25px; cursor: pointer; text-transform: uppercase; margin-top: 10px; font-size: 0.8rem; }
+        .quiz-opt { display: block; width: 100%; padding: 12px; margin: 8px 0; background: #222; color: white; border: 1px solid var(--dourado); border-radius: 8px; box-sizing: border-box; }
+        
+        /* Rodapé Discreto */
+        footer { margin-top: auto; padding: 2rem 1rem; color: var(--dourado); font-size: 0.75rem; opacity: 0.8; border-top: 1px solid #222; width: 100%; }
+        .footer-social { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
+        .footer-social a { text-decoration: none; filter: grayscale(1) brightness(0.8); transition: 0.3s; font-size: 1.2rem; }
+        .footer-social a:hover { filter: grayscale(0) brightness(1); }
+        .privacy-box { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #999; margin-top: 12px; justify-content: center; }
+        
+        /* Botão de Like Discreto */
+        .btn-like-small { background: none; border: 1px solid #444; color: #999; padding: 6px 15px; border-radius: 20px; cursor: pointer; font-size: 0.75rem; margin-top: 5px; transition: 0.3s; }
+        .btn-like-small.active { border-color: var(--dourado); color: var(--dourado); }
     </style>
 </head>
 <body>
@@ -28,49 +37,50 @@
 
     <div class="container">
         <div class="section-box">
-            <p style="color:var(--dourado)">Toque em uma rosa para seu conselho:</p>
+            <p style="color:var(--dourado); font-size: 0.9rem;">Mentalize e escolha uma rosa:</p>
             <div class="roses">
                 <span class="rose" onclick="obterMensagem('vermelha')">🌹</span>
                 <span class="rose" onclick="obterMensagem('preta')">🥀</span>
                 <span class="rose" onclick="obterMensagem('amarela')">🌻</span>
             </div>
             <div id="msg-display"><em id="msg-text">...</em></div>
-        </div>
-
-        <div class="section-box">
-            <button class="btn-main" onclick="darLike()" id="btn-like">
-                ❤️ <span id="like-count">...</span> Saravás
-            </button>
-            <p style="font-size: 0.8rem; margin: 15px 0 10px; color: var(--dourado);">Compartilhar este Axé:</p>
-            <div>
-                <a id="share-wa" class="share-btn" href="#" target="_blank">🟢</a>
-                <a id="share-tg" class="share-btn" href="#" target="_blank">🔵</a>
-            </div>
+            <button class="btn-like-small" onclick="darLike()" id="btn-like">❤️ <span id="like-count">...</span> Saravás</button>
         </div>
 
         <div class="section-box" id="quiz-area">
-            <h3 style="color:var(--dourado)">Qual Pombagira te rege hoje?</h3>
+            <h3 style="color:var(--dourado); font-size: 1.1rem; margin-top:0;">Qual Pombagira te rege hoje?</h3>
             <div id="quiz-content">
                 <button class="btn-main" onclick="carregarQuiz()">Iniciar Consulta</button>
             </div>
         </div>
 
         <div class="section-box" id="area-testemunhos" style="display:none;">
-            <h3 style="color:var(--dourado)">Testemunhos</h3>
-            <div id="lista-depoimentos" style="text-align: left;"></div>
+            <h3 style="color:var(--dourado); font-size: 1.1rem; margin-top:0;">Testemunhos de Fé</h3>
+            <div id="lista-depoimentos" style="text-align: left; font-size: 0.9rem;"></div>
         </div>
 
         <div class="section-box">
-            <h4 style="margin:0 0 10px">Deixe seu relato</h4>
+            <h4 style="margin:0 0 10px; font-size: 1rem;">Deixe seu relato</h4>
             <input type="text" id="depo-nome" placeholder="Seu nome" class="quiz-opt">
-            <textarea id="depo-msg" placeholder="Sua mensagem..." class="quiz-opt" style="height:80px;"></textarea>
-            <button class="btn-main" onclick="enviarDepoimento()">Enviar</button>
+            <textarea id="depo-msg" placeholder="Como as Moças te ajudaram?" class="quiz-opt" style="height:70px;"></textarea>
+            
+            <div class="privacy-box">
+                <input type="checkbox" id="depo-publico" checked>
+                <label for="depo-publico">Autorizo publicar este relato no site.</label>
+            </div>
+            
+            <button class="btn-main" onclick="enviarDepoimento()">Enviar para a Grade</button>
+            <p id="depo-feedback" style="display:none; color:var(--dourado); font-size: 0.75rem; margin-top:10px;">Gratidão! Relatos autorizados passam por aprovação.</p>
         </div>
     </div>
 
     <footer>
-        <div id="view-counter">...</div>
-        Laroyê! ✨ 2026
+        <div id="view-counter">Cruzando caminhos...</div>
+        <div class="footer-social">
+            <a id="share-wa" href="#" target="_blank" title="Compartilhar no WhatsApp"> WhatsApp </a>
+            <a id="share-tg" href="#" target="_blank" title="Compartilhar no Telegram"> Telegram </a>
+        </div>
+        <p style="margin-top:15px; opacity: 0.5;">Laroyê, Minha Senhora! ✨ 2026</p>
     </footer>
 
     <script>
@@ -78,74 +88,89 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJieWd4a2Jld3prbnZqamh4ZHZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwMDcxNjQsImV4cCI6MjA4MTU4MzE2NH0.YrHF9HEGo6yv9MyNsPzFgBhaAB1DRh2SLU8f7L6s1nY';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // --- CONTADORES ---
-        async function registrarTudo() {
-            // Views
+        // --- INICIALIZAÇÃO ---
+        async function iniciarSite() {
+            // Registrar Visita
             const { data: v } = await _supabase.rpc('increment_page_view', { target_page: 'pombagiras' });
-            if(v) document.getElementById('view-counter').innerText = `${v} caminhos cruzados`;
+            if(v) document.getElementById('view-counter').innerText = `${v} caminhos cruzados por aqui`;
 
-            // Likes (Usando a sua page_id que está no print: trans-pride-main)
+            // Carregar Likes (usando a sua page_id: trans-pride-main)
             const { data: l } = await _supabase.from('page_likes').select('likes').eq('page_id', 'trans-pride-main').single();
             if(l) document.getElementById('like-count').innerText = l.likes;
+
+            carregarDepoimentos();
+            configurarLinksCompartilhamento();
         }
 
         async function darLike() {
+            const btn = document.getElementById('btn-like');
             const { data, error } = await _supabase.rpc('increment_page_like', { target_page: 'trans-pride-main' });
-            if(!error) document.getElementById('like-count').innerText = data;
+            if(!error) {
+                document.getElementById('like-count').innerText = data;
+                btn.classList.add('active');
+                if(window.navigator.vibrate) window.navigator.vibrate(50);
+            }
         }
 
-        // --- ORACULO & QUIZ (Igual ao anterior) ---
+        // --- ORÁCULO ---
         async function obterMensagem(cor) {
             const display = document.getElementById('msg-display');
+            const texto = document.getElementById('msg-text');
             display.style.display = 'block';
+            texto.innerText = "Consultando...";
             let { data } = await _supabase.from('mensagens_oraculo').select('texto').eq('cor_rosa', cor).eq('ativa', true);
-            if(data) document.getElementById('msg-text').innerText = data[Math.floor(Math.random() * data.length)].texto;
+            if(data && data.length > 0) texto.innerText = data[Math.floor(Math.random() * data.length)].texto;
         }
 
+        // --- QUIZ ---
         let perguntas = [], etapa = 0, pontos = { rainha: 0, cigana: 0, calunga: 0 };
         async function carregarQuiz() {
             let { data } = await _supabase.from('perguntas_quiz').select('*').eq('ativa', true);
-            if(data) { perguntas = data; etapa = 0; pontos = { rainha: 0, cigana: 0, calunga: 0 }; proximaPergunta(); }
+            if(data) { perguntas = data; etapa = 0; pontos = { rainha: 0, cigana: 0, calunga: 0 }; mostrarPergunta(); }
         }
-        function proximaPergunta() {
+        function mostrarPergunta() {
             const area = document.getElementById('quiz-content');
             if (etapa < perguntas.length) {
                 let p = perguntas[etapa];
-                area.innerHTML = `<p><strong>${p.pergunta}</strong></p>` + 
+                area.innerHTML = `<p style="font-size:0.9rem;">${p.pergunta}</p>` + 
                 ['a','b','c'].map(l => `<button class="quiz-opt" onclick="votar('${p['ponto_'+l]}')">${p['opcao_'+l]}</button>`).join('');
-            } else { finalizar(); }
+            } else { finalizarQuiz(); }
         }
-        function votar(p) { pontos[p]++; etapa++; proximaPergunta(); }
-        function finalizar() {
+        function votar(p) { pontos[p]++; etapa++; mostrarPergunta(); }
+        function finalizarQuiz() {
             let res = Object.keys(pontos).reduce((a, b) => pontos[a] > pontos[b] ? a : b);
-            document.getElementById('quiz-content').innerHTML = `<h4>Sua regência: ${res.toUpperCase()}</h4><button class="btn-main" onclick="carregarQuiz()">Refazer</button>`;
+            document.getElementById('quiz-content').innerHTML = `<h4 style="color:var(--dourado)">Regência: ${res.toUpperCase()}</h4><button class="btn-main" onclick="carregarQuiz()">Refazer Consulta</button>`;
         }
 
         // --- DEPOIMENTOS ---
         async function enviarDepoimento() {
             const nome = document.getElementById('depo-nome').value;
-            const mensagem = document.getElementById('depo-msg').value;
-            if(!nome || !mensagem) return;
-            await _supabase.from('depoimentos').insert([{ nome, mensagem }]);
-            alert("Enviado! Aguarde aprovação.");
+            const msg = document.getElementById('depo-msg').value;
+            if(!nome || !msg) return alert("Por favor, preencha nome e mensagem.");
+            const { error } = await _supabase.from('depoimentos').insert([{ nome, mensagem: msg }]);
+            if(!error) {
+                document.getElementById('depo-nome').value = '';
+                document.getElementById('depo-msg').value = '';
+                document.getElementById('depo-feedback').style.display = 'block';
+            }
         }
 
         async function carregarDepoimentos() {
             let { data } = await _supabase.from('depoimentos').select('nome, mensagem').eq('aprovado', true).order('criado_em', { ascending: false });
             if (data && data.length > 0) {
                 document.getElementById('area-testemunhos').style.display = 'block';
-                document.getElementById('lista-depoimentos').innerHTML = data.map(d => `<div style="border-bottom:1px solid #333; padding:10px 0;"><strong>${d.nome}:</strong><br><em>"${d.mensagem}"</em></div>`).join('');
+                document.getElementById('lista-depoimentos').innerHTML = data.map(d => `<div style="border-bottom:1px solid #333; padding:12px 0;"><strong>${d.nome}</strong><br><em style="color:#ccc;">"${d.mensagem}"</em></div>`).join('');
             }
         }
 
-        // --- SHARE ---
-        const url = encodeURIComponent(window.location.href);
-        const txt = encodeURIComponent("Veja seu oráculo no Caminhos da Rosa! 🌹");
-        document.getElementById('share-wa').href = `https://api.whatsapp.com/send?text=${txt}%20${url}`;
-        document.getElementById('share-tg').href = `https://t.me/share/url?url=${url}&text=${txt}`;
+        function configurarLinksCompartilhamento() {
+            const url = encodeURIComponent(window.location.href);
+            const txt = encodeURIComponent("Encontrei um oráculo das Pombagiras incrível! Veja o seu conselho: ");
+            document.getElementById('share-wa').href = `https://api.whatsapp.com/send?text=${txt}%20${url}`;
+            document.getElementById('share-tg').href = `https://t.me/share/url?url=${url}&text=${txt}`;
+        }
 
-        registrarTudo();
-        carregarDepoimentos();
+        iniciarSite();
     </script>
 </body>
 </html>
