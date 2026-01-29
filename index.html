@@ -76,7 +76,7 @@
     </div>
 
     <footer>
-        <div id="view-counter" style="margin-bottom: 5px;">...</div>
+        <div id="view-counter" style="margin-bottom: 5px;">Invocando caminhos...</div>
         Laroyê, Minha Senhora! ✨ 2026
     </footer>
 
@@ -85,14 +85,19 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJieWd4a2Jld3prbnZqamh4ZHZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwMDcxNjQsImV4cCI6MjA4MTU4MzE2NH0.YrHF9HEGo6yv9MyNsPzFgBhaAB1DRh2SLU8f7L6s1nY';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // --- CONTADOR DE ACESSOS ---
+        // --- CONTADOR USANDO A FUNÇÃO RPC ---
         async function registrarVisita() {
-            // Insere uma nova linha na sua tabela page_views
-            await _supabase.from('page_views').insert([{ page_path: window.location.pathname }]);
-            
-            // Busca o total para exibir (Opcional)
-            let { count } = await _supabase.from('page_views').select('*', { count: 'exact', head: true });
-            if(count) document.getElementById('view-counter').innerText = `${count} caminhos cruzados por aqui`;
+            try {
+                const { data, error } = await _supabase.rpc('increment_page_view', { 
+                    target_page: 'pombagiras' 
+                });
+                
+                if (data !== null) {
+                    document.getElementById('view-counter').innerText = `${data} caminhos cruzados por aqui`;
+                }
+            } catch (e) {
+                console.log("Erro no contador:", e);
+            }
         }
 
         // --- ORÁCULO ---
@@ -132,11 +137,8 @@
         async function enviarDepoimento() {
             const nome = document.getElementById('depo-nome').value;
             const msg = document.getElementById('depo-msg').value;
-            const ePublico = document.getElementById('depo-publico').checked;
             if(!nome || !msg) return alert("Preencha todos os campos.");
 
-            // Aqui enviamos também a informação se o usuário autorizou (vai para o campo 'aprovado' como false inicialmente)
-            // Se ele NÃO autorizar, você saberá no banco porque pode criar uma coluna 'autorizado_pelo_usuario' ou apenas ler e não aprovar.
             const { error } = await _supabase.from('depoimentos').insert([{ nome, mensagem: msg }]);
             if (!error) {
                 document.getElementById('depo-nome').value = '';
