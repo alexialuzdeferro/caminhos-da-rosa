@@ -104,9 +104,9 @@
             <h3>Relate sua Graça</h3>
             <input type="text" id="depo-nome" placeholder="Seu nome" class="quiz-opt">
             <textarea id="depo-msg" placeholder="Como as Moças te ajudaram?" class="quiz-opt" style="height:100px; resize: none;"></textarea>
-            <div style="display:flex; align-items:center; gap:10px; font-size:0.8rem; color:#888; margin:10px 0;">
+            <div style="display:flex; align-items:center; gap:10px; font-size:0.85rem; color:#aaa; margin:15px 0; justify-content: center;">
                 <input type="checkbox" id="depo-publico" checked> 
-                <label for="depo-publico">Autorizo publicar este relato na grade.</label>
+                <label for="depo-publico">Autorizo publicar este relato no site.</label>
             </div>
             <button class="btn-main" onclick="enviarDepoimento()">Enviar para a Grade</button>
         </div>
@@ -126,23 +126,21 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJieWd4a2Jld3prbnZqamh4ZHZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwMDcxNjQsImV4cCI6MjA4MTU4MzE2NH0.YrHF9HEGo6yv9MyNsPzFgBhaAB1DRh2SLU8f7L6s1nY';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // --- BANCO DE DADOS DA ENCICLOPÉDIA ---
         const dadosPombagiras = {
-            padilha: { titulo: "Maria Padilha", energia: "Comando / Realeza", dia: "Sexta-feira", cores: "Vermelho, Dourado, Preto", oferendas: "Champanhe, rosas vermelhas, perfumes caros.", desc: "Soberana das encruzilhadas, Maria Padilha rege com autoridade e elegância. É a senhora do comando, justiça e das paixões avassaladoras." },
-            mulambo: { titulo: "Maria Mulambo", energia: "Cura / Humildade", dia: "Segunda ou Quarta-feira", cores: "Branco, Verde-claro, Cinza", oferendas: "Velas brancas, flores do campo, mel, ervas.", desc: "Maria Mulambo transforma trapos em ouro espiritual. É a senhora da cura física e da alma, acolhendo os abandonados com amor e resiliência." },
-            quiteria: { titulo: "Maria Quitéria", energia: "Guerra / Proteção", dia: "Terça-feira", cores: "Vermelho, Marrom, Preto", oferendas: "Velas vermelhas, cerveja preta, pimenta.", desc: "Guerreira implacável, protege contra inimigos e dá coragem para enfrentar batalhas pessoais. Sua energia é de força e determinação." },
-            caveira: { titulo: "Rosa Caveira", energia: "Justiça / Transformação", dia: "Sábado", cores: "Preto, Vermelho-sangue, Roxo", oferendas: "Velas pretas, vinho tinto, moedas.", desc: "Trabalha no limite entre a vida e a morte. Rosa Caveira traz justiça rigorosa e a transformação necessária para quem precisa renascer." },
-            dama: { titulo: "Dama da Noite", energia: "Mistério / Oculto", dia: "Sexta-feira (Noite)", cores: "Preto, Roxo, Azul-escuro", oferendas: "Dama-da-noite (flor), incenso de mirra, vinho.", desc: "Senhora dos segredos e da magia oculta. Ela ajuda a desvendar verdades escondidas e protege o conhecimento sagrado." },
-            saias: { titulo: "Sete Saias", energia: "Alegria / Intensidade", dia: "Quinta ou Domingo", cores: "Multicolorido", oferendas: "Doces, frutas, música, fitas coloridas.", desc: "A alegria em forma de espírito. Traz movimento, paixão e fertilidade, limpando a tristeza com sua dança contagiante." },
-            cigana: { titulo: "Pombagira Cigana", energia: "Liberdade / Prosperidade", dia: "Quarta-feira", cores: "Vermelho, Dourado, Verde", oferendas: "Moedas, joias, baralho, vinho doce.", desc: "Dona da estrada e da sorte. Abre caminhos para a prosperidade material e traz a liberdade para quem se sente aprisionado." },
-            navalha: { titulo: "Maria Navalha", energia: "Malandragem / Rua", dia: "Terça ou Sexta", cores: "Preto, Vermelho, Prata", oferendas: "Cerveja, cigarro, dinheiro, navalhas.", desc: "Protetora dos caminhos urbanos e da sobrevivência. Maria Navalha traz astúcia e defesa contra perigos iminentes." },
-            praia: { titulo: "Pombagira da Praia", energia: "Emoção / Limpeza", dia: "Quinta ou Segunda", cores: "Azul, Branco, Prata", oferendas: "Champanhe rosé, conchas, perfumes suaves.", desc: "Senhora das águas que lavam a alma. Trabalha no equilíbrio das emoções e na purificação espiritual profunda." },
-            farrapo: { titulo: "Maria Farrapo", energia: "Sanidade / Equilíbrio Mental", dia: "Segunda-feira", cores: "Branco sujo, Cinza, Lilás", oferendas: "Velas brancas, lavanda, água com sal.", desc: "Atua no caos mental para trazer clareza. Ajuda a reconstruir a mente após traumas e confusões espirituais." },
-            menina: { titulo: "Pombagira Menina", energia: "Renovação / Inocência", dia: "Domingo", cores: "Rosa, Branco, Azul-claro", oferendas: "Doces, balas, brinquedos, flores brancas.", desc: "A energia do recomeço e da esperança. Protege novos projetos e traz leveza para situações pesadas." },
-            figueira: { titulo: "Pombagira da Figueira", energia: "Raiz / Ancestralidade", dia: "Sábado", cores: "Marrom, Verde-escuro, Preto", oferendas: "Folhas de figueira, mel, sementes.", desc: "Guardiã das raízes e dos antepassados. Traz estabilidade familiar e conexão com as forças da terra." }
+            padilha: { titulo: "Maria Padilha", energia: "Comando / Realeza", dia: "Sexta-feira", cores: "Vermelho, Dourado, Preto", oferendas: "Champanhe, rosas vermelhas, perfumes caros.", desc: "Soberana das encruzilhadas, Maria Padilha rege com autoridade e elegância. É a senhora do comando e das causas impossíveis." },
+            mulambo: { titulo: "Maria Mulambo", energia: "Cura / Humildade", dia: "Segunda ou Quarta-feira", cores: "Branco, Verde-claro, Cinza", oferendas: "Velas brancas, flores do campo, mel, ervas.", desc: "Maria Mulambo transforma trapos em axé. É a senhora da cura da alma, acolhendo os aflitos com amor e resiliência." },
+            quiteria: { titulo: "Maria Quitéria", energia: "Guerra / Proteção", dia: "Terça-feira", cores: "Vermelho, Marrom, Preto", oferendas: "Velas vermelhas, cerveja preta, pimenta.", desc: "Guerreira implacável, protege contra inimigos e dá coragem para enfrentar batalhas pessoais. Sua energia é de força pura." },
+            caveira: { titulo: "Rosa Caveira", energia: "Justiça / Transformação", dia: "Sábado", cores: "Preto, Vermelho-sangue, Roxo", oferendas: "Velas pretas, vinho tinto, moedas.", desc: "Trabalha no limite entre a vida e a morte. Rosa Caveira traz justiça rigorosa e a transformação para quem precisa renascer." },
+            dama: { titulo: "Dama da Noite", energia: "Mistério / Oculto", dia: "Sexta-feira (Noite)", cores: "Preto, Roxo, Azul-escuro", oferendas: "Dama-da-noite (flor), incenso de mirra, vinho.", desc: "Senhora dos segredos. Ela ajuda a desvendar verdades escondidas e protege o conhecimento sagrado na calada da noite." },
+            saias: { titulo: "Sete Saias", energia: "Alegria / Intensidade", dia: "Quinta ou Domingo", cores: "Multicolorido", oferendas: "Doces, frutas, música, fitas coloridas.", desc: "A alegria em forma de espírito. Traz movimento e paixão, limpando a tristeza com sua dança e suas sete saias coloridas." },
+            cigana: { titulo: "Pombagira Cigana", energia: "Liberdade / Prosperidade", dia: "Quarta-feira", cores: "Vermelho, Dourado, Verde", oferendas: "Moedas, joias, baralho, vinho doce.", desc: "Dona da estrada e da sorte. Abre caminhos para a prosperidade material e traz a liberdade para quem se sente estagnado." },
+            navalha: { titulo: "Maria Navalha", energia: "Malandragem / Rua", dia: "Terça ou Sexta", cores: "Preto, Vermelho, Prata", oferendas: "Cerveja, cigarro, dinheiro, navalhas.", desc: "Protetora dos caminhos urbanos. Maria Navalha traz astúcia, defesa e justiça para os que lutam nas ruas da vida." },
+            praia: { titulo: "Pombagira da Praia", energia: "Emoção / Limpeza", dia: "Quinta ou Segunda", cores: "Azul, Branco, Prata", oferendas: "Champanhe rosé, conchas, perfumes suaves.", desc: "Senhora das águas. Trabalha no equilíbrio das emoções e na purificação espiritual profunda, lavando o coração." },
+            farrapo: { titulo: "Maria Farrapo", energia: "Sanidade / Equilíbrio Mental", dia: "Segunda-feira", cores: "Branco sujo, Cinza, Lilás", oferendas: "Velas brancas, lavanda, água com sal.", desc: "Atua no caos para trazer clareza. Ajuda a reconstruir a mente e o equilíbrio espiritual após grandes tormentas." },
+            menina: { titulo: "Pombagira Menina", energia: "Renovação / Inocência", dia: "Domingo", cores: "Rosa, Branco, Azul-claro", oferendas: "Doces, balas, brinquedos, flores brancas.", desc: "A energia do recomeço. Protege novos projetos, a juventude e traz leveza para situações pesadas da vida cotidiana." },
+            figueira: { titulo: "Pombagira da Figueira", energia: "Raiz / Ancestralidade", dia: "Sábado", cores: "Marrom, Verde-escuro, Preto", oferendas: "Folhas de figueira, mel, sementes.", desc: "Guardiã das raízes. Traz estabilidade familiar, firmeza e uma forte conexão com a ancestralidade e as forças da terra." }
         };
 
-        // --- FUNÇÕES DO SITE ---
         async function iniciarSite() {
             const { data: v } = await _supabase.rpc('increment_page_view', { target_page: 'pombagiras' });
             if(v) document.getElementById('view-counter').innerText = `${v} caminhos cruzados por aqui`;
@@ -169,7 +167,7 @@
             const display = document.getElementById('msg-display');
             display.style.display = 'block';
             let { data } = await _supabase.from('mensagens_oraculo').select('texto').eq('cor_rosa', cor).eq('ativa', true);
-            if(data) document.getElementById('msg-text').innerText = data[Math.floor(Math.random() * data.length)].texto;
+            if(data && data.length > 0) document.getElementById('msg-text').innerText = data[Math.floor(Math.random() * data.length)].texto;
         }
 
         let perguntas = [], etapa = 0, pontos = { rainha: 0, cigana: 0, calunga: 0 };
@@ -200,10 +198,24 @@
         async function enviarDepoimento() {
             const nome = document.getElementById('depo-nome').value;
             const msg = document.getElementById('depo-msg').value;
-            if(!nome || !msg) return alert("Preencha os campos.");
-            await _supabase.from('depoimentos').insert([{ nome, mensagem: msg, aprovado: false }]);
-            alert("Gratidão! Seu relato foi enviado para moderação.");
-            document.getElementById('depo-nome').value = ''; document.getElementById('depo-msg').value = '';
+            const querPublicar = document.getElementById('depo-publico').checked;
+
+            if(!nome || !msg) return alert("Por favor, preencha nome e relato.");
+            
+            const { error } = await _supabase.from('depoimentos').insert([{ 
+                nome: nome, 
+                mensagem: msg, 
+                aprovado: false, 
+                autorizado: querPublicar 
+            }]);
+
+            if(!error) {
+                alert("Gratidão! Seu relato foi enviado. Se você autorizou, ele aparecerá em breve após a moderação.");
+                document.getElementById('depo-nome').value = ''; 
+                document.getElementById('depo-msg').value = '';
+            } else {
+                alert("Houve um erro. Tente novamente.");
+            }
         }
 
         async function carregarDepoimentos() {
