@@ -3,106 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caminhos da Rosa | Real-Time</title>
+    <title>Caminhos da Rosa | Oráculo & Comunidade</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --vinho: #4a0404; --dourado: #c5a059; --preto: #0a0a0a; --texto: #f5f5f5; }
-        body { background: var(--preto); color: var(--texto); font-family: 'Georgia', serif; margin: 0; text-align: center; }
-        header { padding: 2rem; border-bottom: 1px solid var(--dourado); background: #1a0202; }
-        h1 { color: var(--dourado); letter-spacing: 3px; text-transform: uppercase; font-size: 1.5rem; }
-        .container { padding: 20px; max-width: 500px; margin: auto; }
-        .section-box { background: #1a1a1a; padding: 20px; border-radius: 15px; border: 1px solid #333; margin-bottom: 20px; }
+        :root {
+            --vinho: #4a0404;
+            --dourado: #c5a059;
+            --preto: #0a0a0a;
+            --cinza: #1a1a1a;
+            --texto: #f5f5f5;
+        }
+
+        body {
+            background-color: var(--preto);
+            color: var(--texto);
+            font-family: 'Georgia', serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 2rem;
+            text-align: center;
+            width: 100%;
+            border-bottom: 1px solid var(--dourado);
+            background: linear-gradient(to bottom, #1a0202, var(--preto));
+        }
+
+        h1 { color: var(--dourado); letter-spacing: 3px; text-transform: uppercase; font-size: 1.5rem; margin: 0; }
+
+        .container { width: 100%; max-width: 500px; padding: 20px; }
+
+        .section-box {
+            background: var(--cinza);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #333;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        /* ORÁCULO */
         .roses { display: flex; justify-content: space-around; font-size: 3.5rem; margin: 20px 0; }
-        .rose { cursor: pointer; transition: 0.3s; }
+        .rose { cursor: pointer; transition: 0.3s; filter: drop-shadow(0 0 5px rgba(197,160,89,0.3)); }
         .rose:active { transform: scale(0.8); }
-        #msg-display { display: none; padding: 15px; background: rgba(74, 4, 4, 0.5); border-left: 3px solid var(--dourado); margin-top: 15px; }
-        .btn-main { background: var(--dourado); color: var(--preto); border: none; padding: 15px; width: 100%; font-weight: bold; border-radius: 25px; cursor: pointer; margin-top: 10px; }
-        .quiz-opt { display: block; width: 100%; padding: 10px; margin: 5px 0; background: transparent; color: white; border: 1px solid var(--dourado); border-radius: 8px; }
+        #msg-display { 
+            display: none; padding: 15px; background: rgba(74, 4, 4, 0.5); 
+            border-left: 3px solid var(--dourado); margin-top: 15px; font-style: italic;
+            animation: fadeIn 0.5s;
+        }
+
+        /* BOTÕES E INPUTS */
+        .btn-main {
+            background: var(--dourado); color: var(--preto); border: none;
+            padding: 15px; width: 100%; font-weight: bold; border-radius: 25px;
+            cursor: pointer; text-transform: uppercase; margin-top: 10px;
+        }
+        .quiz-opt {
+            display: block; width: 100%; padding: 12px; margin: 8px 0;
+            background: #222; color: white; border: 1px solid var(--dourado); border-radius: 8px;
+        }
+
+        /* DEPOIMENTOS */
+        #lista-depoimentos { text-align: left; margin-top: 15px; }
+        .depo-item { border-bottom: 1px solid #333; padding: 10px 0; animation: fadeIn 0.5s; }
+        .depo-nome { color: var(--dourado); font-weight: bold; display: block; }
+
+        /* ACCORDION */
+        .acc-header { padding: 15px 0; cursor: pointer; color: var(--dourado); font-weight: bold; border-bottom: 1px solid #333; display: flex; justify-content: space-between; }
+        .acc-content { max-height: 0; overflow: hidden; transition: max-height 0.3s; font-size: 0.9rem; color: #ccc; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        footer { margin-top: auto; padding: 2rem; color: var(--dourado); font-size: 0.8rem; opacity: 0.6; }
     </style>
 </head>
 <body>
 
-<header><h1>Caminhos da Rosa</h1></header>
+    <header><h1>Caminhos da Rosa</h1></header>
 
-<div class="container">
-    <div class="section-box">
-        <p style="color:var(--dourado)">Toque em uma rosa para sua mensagem:</p>
-        <div class="roses">
-            <span class="rose" onclick="obterMensagem('vermelha')">🌹</span>
-            <span class="rose" onclick="obterMensagem('preta')">🥀</span>
-            <span class="rose" onclick="obterMensagem('amarela')">🌻</span>
+    <div class="container">
+        
+        <div class="section-box">
+            <p style="color:var(--dourado); font-size: 0.9rem;">Mentalize seu pedido e toque em uma rosa:</p>
+            <div class="roses">
+                <span class="rose" onclick="obterMensagem('vermelha')">🌹</span>
+                <span class="rose" onclick="obterMensagem('preta')">🥀</span>
+                <span class="rose" onclick="obterMensagem('amarela')">🌻</span>
+            </div>
+            <div id="msg-display"><em id="msg-text">Consultando as Moças...</em></div>
         </div>
-        <div id="msg-display"><em id="msg-text">Carregando sabedoria...</em></div>
+
+        <div class="section-box" id="quiz-area">
+            <h3 style="color:var(--dourado); margin-top:0;">Energia de Regência</h3>
+            <div id="quiz-content">
+                <p>Descubra qual arquétipo vibra em você hoje.</p>
+                <button class="btn-main" onclick="carregarQuiz()">Iniciar Consulta</button>
+            </div>
+        </div>
+
+        <div class="section-box" id="area-testemunhos" style="display:none;">
+            <h3 style="color:var(--dourado); margin-top:0;">Testemunhos de Fé</h3>
+            <div id="lista-depoimentos"></div>
+        </div>
+
+        <div class="section-box">
+            <h4 style="margin-top:0;">Deixe seu relato</h4>
+            <input type="text" id="depo-nome" placeholder="Seu nome" class="quiz-opt">
+            <textarea id="depo-msg" placeholder="Como as Moças te ajudaram?" class="quiz-opt" style="height:80px; font-family: inherit;"></textarea>
+            <button class="btn-main" onclick="enviarDepoimento()">Enviar Relato</button>
+            <p id="depo-feedback" style="display:none; color:var(--dourado); font-size: 0.8rem; margin-top:10px;">Gratidão! Seu relato passará por aprovação.</p>
+        </div>
+
+        <div class="acc-header" onclick="toggleAcc(this)">Guia de Oferendas Éticas <span>+</span></div>
+        <div class="acc-content">
+            <p>O sagrado respeita a terra. Use flores naturais, evite plásticos e nunca deixe vidros em encruzilhadas de mata ou terra. A natureza agradece o axé!</p>
+        </div>
+
     </div>
 
-    <div class="section-box" id="quiz-area">
-        <h3 style="color:var(--dourado)">Regência Atual</h3>
-        <div id="quiz-content">
-            <button class="btn-main" onclick="carregarQuiz()">Descobrir minha energia</button>
-        </div>
-    </div>
-</div>
+    <footer>Laroyê, Minha Senhora! ✨ 2024</footer>
 
-<script>
-    // CONFIGURAÇÃO SUPABASE
-    const SUPABASE_URL = 'https://rbygxkbewzknvjjhxdvw.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJieWd4a2Jld3prbnZqamh4ZHZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwMDcxNjQsImV4cCI6MjA4MTU4MzE2NH0.YrHF9HEGo6yv9MyNsPzFgBhaAB1DRh2SLU8f7L6s1nY';
-    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    <script>
+        // CONFIGURAÇÃO SUPABASE
+        const SUPABASE_URL = 'https://rbygxkbewzknvjjhxdvw.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJieWd4a2Jld3prbnZqamh4ZHZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwMDcxNjQsImV4cCI6MjA4MTU4MzE2NH0.YrHF9HEGo6yv9MyNsPzFgBhaAB1DRh2SLU8f7L6s1nY';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // FUNÇÃO ORÁCULO DINÂMICO
-    async function obterMensagem(cor) {
-        const display = document.getElementById('msg-display');
-        const texto = document.getElementById('msg-text');
-        display.style.display = 'block';
-        texto.innerText = "Consultando as Moças...";
+        // 🌹 ORÁCULO
+        async function obterMensagem(cor) {
+            const display = document.getElementById('msg-display');
+            const texto = document.getElementById('msg-text');
+            display.style.display = 'block';
+            texto.innerText = "Buscando conselho...";
 
-        let { data, error } = await _supabase
-            .from('mensagens_oraculo')
-            .select('texto')
-            .eq('cor_rosa', cor)
-            .eq('ativa', true);
-
-        if (data && data.length > 0) {
-            const sorteada = data[Math.floor(Math.random() * data.length)];
-            texto.innerText = sorteada.texto;
+            let { data } = await _supabase.from('mensagens_oraculo').select('texto').eq('cor_rosa', cor).eq('ativa', true);
+            
+            if (data && data.length > 0) {
+                const sorteada = data[Math.floor(Math.random() * data.length)];
+                texto.innerText = sorteada.texto;
+            } else {
+                texto.innerText = "As Moças pedem paciência. Tente novamente em breve.";
+            }
+            if(window.navigator.vibrate) window.navigator.vibrate(50);
         }
-        if(window.navigator.vibrate) window.navigator.vibrate(50);
-    }
 
-    // FUNÇÃO QUIZ DINÂMICO
-    let perguntas = [];
-    let etapa = 0;
-    let pontos = { rainha: 0, cigana: 0, calunga: 0 };
+        // 📋 QUIZ
+        let perguntas = [];
+        let etapa = 0;
+        let pontos = { rainha: 0, cigana: 0, calunga: 0 };
 
-    async function carregarQuiz() {
-        let { data } = await _supabase.from('perguntas_quiz').select('*').eq('ativa', true);
-        perguntas = data;
-        etapa = 0;
-        pontos = { rainha: 0, cigana: 0, calunga: 0 };
-        proximaPergunta();
-    }
-
-    function proximaPergunta() {
-        const area = document.getElementById('quiz-content');
-        if (etapa < perguntas.length) {
-            let p = perguntas[etapa];
-            area.innerHTML = `
-                <p><strong>${p.pergunta}</strong></p>
-                <button class="quiz-opt" onclick="votar('${p.ponto_a}')">${p.opcao_a}</button>
-                <button class="quiz-opt" onclick="votar('${p.ponto_b}')">${p.opcao_b}</button>
-                <button class="quiz-opt" onclick="votar('${p.ponto_c}')">${p.opcao_c}</button>
-            `;
-        } else {
-            finalizar();
+        async function carregarQuiz() {
+            let { data } = await _supabase.from('perguntas_quiz').select('*').eq('ativa', true);
+            if(data && data.length > 0) {
+                perguntas = data;
+                etapa = 0;
+                pontos = { rainha: 0, cigana: 0, calunga: 0 };
+                proximaPergunta();
+            }
         }
-    }
 
-    function votar(p) { pontos[p]++; etapa++; proximaPergunta(); }
+        function proximaPergunta() {
+            const area = document.getElementById('quiz-content');
+            if (etapa < perguntas.length) {
+                let p = perguntas[etapa];
+                area.innerHTML = `
+                    <p><strong>${p.pergunta}</strong></p>
+                    <button class="quiz-opt" onclick="votar('${p.ponto_a}')">${p.opcao_a}</button>
+                    <button class="quiz-opt" onclick="votar('${p.ponto_b}')">${p.opcao_b}</button>
+                    <button class="quiz-opt" onclick="votar('${p.ponto_c}')">${p.opcao_c}</button>
+                `;
+            } else { finalizarQuiz(); }
+        }
 
-    function finalizar() {
-        let res = Object.keys(pontos).reduce((a, b) => pontos[a] > pontos[b] ? a : b);
-        document.getElementById('quiz-content').innerHTML = `<h4>Sua energia atual é: ${res.toUpperCase()}</h4><button class="btn-main" onclick="carregarQuiz()">Refazer</button>`;
-    }
-</script>
+        function votar(p) { pontos[p]++; etapa++; proximaPergunta(); }
+
+        function finalizarQuiz() {
+            let res = Object.keys(pontos).reduce((a, b) => pontos[a] > pontos[b] ? a : b);
+            const desc = {
+                rainha: "Sua energia atual é de comando e dignidade. Você vibra com a força das Rainhas.",
+                cigana: "Seu caminho pede liberdade e movimento. A energia Cigana te guia.",
+                calunga: "Momento de proteção pesada e silêncio sábio. A força das Almas te guarda."
+            };
+            document.getElementById('quiz-content').innerHTML = `<h4>Perfil: ${res.toUpperCase()}</h4><p>${desc[res]}</p><button class="btn-main" onclick="carregarQuiz()">Refazer</button>`;
+        }
+
+        // ✍️ DEPOIMENTOS
+        async function enviarDepoimento() {
+            const nome = document.getElementById('depo-nome').value;
+            const msg = document.getElementById('depo-msg').value;
+            if(!nome || !msg) return alert("Preencha todos os campos.");
+
+            const { error } = await _supabase.from('depoimentos').insert([{ nome, mensagem: msg }]);
+            if (!error) {
+                document.getElementById('depo-nome').value = '';
+                document.getElementById('depo-msg').value = '';
+                document.getElementById('depo-feedback').style.display = 'block';
+            }
+        }
+
+        async function carregarDepoimentos() {
+            const lista = document.getElementById('lista-depoimentos');
+            const secao = document.getElementById('area-testemunhos');
+            let { data } = await _supabase.from('depoimentos').select('nome, mensagem').eq('aprovado', true).order('criado_em', { ascending: false });
+            
+            if (data && data.length > 0) {
+                secao.style.display = 'block';
+                lista.innerHTML = data.map(d => `<div class="depo-item"><span class="depo-nome">${d.nome}</span><em>"${d.mensagem}"</em></div>`).join('');
+            }
+        }
+
+        // ➕ UTILS
+        function toggleAcc(el) {
+            const content = el.nextElementSibling;
+            content.style.maxHeight = content.style.maxHeight ? null : content.scrollHeight + "px";
+        }
+
+        // Início
+        carregarDepoimentos();
+    </script>
 </body>
 </html>
