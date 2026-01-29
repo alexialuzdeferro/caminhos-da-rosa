@@ -4,31 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Caminhos da Rosa | Oráculo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Quicksand:wght@300;500&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root { --vinho: #4a0404; --dourado: #c5a059; --preto: #0a0a0a; --cinza: #1a1a1a; --texto: #f5f5f5; }
-        body { background-color: var(--preto); color: var(--texto); font-family: 'Georgia', serif; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; text-align: center; }
-        header { padding: 2rem; width: 100%; border-bottom: 1px solid var(--dourado); background: #1a0202; }
-        h1 { color: var(--dourado); letter-spacing: 3px; text-transform: uppercase; font-size: 1.4rem; margin: 0; }
+        
+        body { 
+            background-color: var(--preto); 
+            color: var(--texto); 
+            font-family: 'Quicksand', sans-serif; 
+            margin: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh; 
+        }
+
+        h1, h3, h4 { font-family: 'Cinzel', serif; color: var(--dourado); text-transform: uppercase; letter-spacing: 2px; }
+        
+        header { padding: 2rem; width: 100%; border-bottom: 1px solid var(--dourado); background: #1a0202; text-align: center; }
+        h1 { font-size: 1.5rem; margin: 0; }
+
         .container { width: 100%; max-width: 500px; padding: 20px; box-sizing: border-box; }
-        .section-box { background: var(--cinza); padding: 20px; border-radius: 15px; border: 1px solid #333; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        
+        .section-box { 
+            background: var(--cinza); 
+            padding: 25px; 
+            border-radius: 15px; 
+            border: 1px solid #333; 
+            margin-bottom: 25px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6); 
+        }
+
         .roses { display: flex; justify-content: space-around; font-size: 3rem; margin: 20px 0; }
-        .rose { cursor: pointer; transition: 0.3s; }
-        .rose:active { transform: scale(0.8); }
-        #msg-display { display: none; padding: 15px; background: rgba(74, 4, 4, 0.4); border-left: 3px solid var(--dourado); margin-top: 15px; font-style: italic; font-size: 0.95rem; }
-        .btn-main { background: var(--dourado); color: var(--preto); border: none; padding: 14px; width: 100%; font-weight: bold; border-radius: 25px; cursor: pointer; text-transform: uppercase; margin-top: 10px; font-size: 0.8rem; }
-        .quiz-opt { display: block; width: 100%; padding: 12px; margin: 8px 0; background: #222; color: white; border: 1px solid var(--dourado); border-radius: 8px; box-sizing: border-box; }
+        .rose { cursor: pointer; transition: transform 0.3s; }
+        .rose:hover { transform: scale(1.1); filter: drop-shadow(0 0 8px var(--dourado)); }
+
+        #msg-display { 
+            display: none; padding: 20px; background: rgba(74, 4, 4, 0.6); 
+            border-radius: 8px; border-left: 4px solid var(--dourado); 
+            margin: 15px 0; font-style: italic; line-height: 1.6;
+        }
+
+        /* Botão Like Minimalista */
+        .btn-like-minimal {
+            background: rgba(255,255,255,0.05); border: 1px solid #444; color: #999;
+            padding: 8px 20px; border-radius: 30px; cursor: pointer;
+            font-size: 0.8rem; transition: 0.3s; margin: 10px auto; display: block;
+        }
+        .btn-like-minimal:hover, .btn-like-minimal.active { border-color: var(--dourado); color: var(--dourado); background: rgba(197, 160, 89, 0.1); }
+
+        .btn-main { 
+            background: var(--dourado); color: var(--preto); border: none; 
+            padding: 16px; width: 100%; font-weight: bold; border-radius: 30px; 
+            cursor: pointer; text-transform: uppercase; font-family: 'Cinzel', serif;
+            letter-spacing: 1px; transition: 0.3s;
+        }
+        .btn-main:hover { background: #e2bd7a; transform: translateY(-2px); }
+
+        .quiz-opt { 
+            display: block; width: 100%; padding: 14px; margin: 10px 0; 
+            background: #222; color: white; border: 1px solid #444; border-radius: 10px; 
+            font-family: inherit; cursor: pointer; transition: 0.3s;
+        }
+        .quiz-opt:hover { border-color: var(--dourado); }
+
+        /* Rodapé visível */
+        footer { 
+            margin-top: auto; padding: 3rem 1rem; width: 100%; 
+            background: #050505; border-top: 1px solid #222; text-align: center;
+        }
+        #view-counter { color: var(--dourado); font-size: 0.85rem; margin-bottom: 15px; font-weight: 500; }
         
-        /* Rodapé Discreto */
-        footer { margin-top: auto; padding: 2rem 1rem; color: var(--dourado); font-size: 0.75rem; opacity: 0.8; border-top: 1px solid #222; width: 100%; }
-        .footer-social { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
-        .footer-social a { text-decoration: none; filter: grayscale(1) brightness(0.8); transition: 0.3s; font-size: 1.2rem; }
-        .footer-social a:hover { filter: grayscale(0) brightness(1); }
-        .privacy-box { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #999; margin-top: 12px; justify-content: center; }
-        
-        /* Botão de Like Discreto */
-        .btn-like-small { background: none; border: 1px solid #444; color: #999; padding: 6px 15px; border-radius: 20px; cursor: pointer; font-size: 0.75rem; margin-top: 5px; transition: 0.3s; }
-        .btn-like-small.active { border-color: var(--dourado); color: var(--dourado); }
+        .footer-social { display: flex; justify-content: center; gap: 25px; }
+        .footer-social a { 
+            color: #f5f5f5; text-decoration: none; font-size: 0.9rem; 
+            font-weight: 500; padding: 5px 12px; border: 1px solid #333; border-radius: 5px;
+            transition: 0.3s;
+        }
+        .footer-social a:hover { color: var(--dourado); border-color: var(--dourado); }
+
+        .privacy-box { 
+            display: flex; align-items: center; justify-content: center; 
+            gap: 10px; font-size: 0.8rem; color: #888; margin: 15px 0; 
+        }
+        input[type="checkbox"] { accent-color: var(--dourado); }
+
     </style>
 </head>
 <body>
@@ -37,50 +98,54 @@
 
     <div class="container">
         <div class="section-box">
-            <p style="color:var(--dourado); font-size: 0.9rem;">Mentalize e escolha uma rosa:</p>
+            <p style="font-size: 0.9rem; letter-spacing: 1px;">Sinta a energia e toque em uma rosa:</p>
             <div class="roses">
                 <span class="rose" onclick="obterMensagem('vermelha')">🌹</span>
                 <span class="rose" onclick="obterMensagem('preta')">🥀</span>
                 <span class="rose" onclick="obterMensagem('amarela')">🌻</span>
             </div>
-            <div id="msg-display"><em id="msg-text">...</em></div>
-            <button class="btn-like-small" onclick="darLike()" id="btn-like">❤️ <span id="like-count">...</span> Saravás</button>
+            
+            <div id="msg-display"><span id="msg-text"></span></div>
+            
+            <button class="btn-like-minimal" onclick="darLike()" id="btn-like">
+                ❤️ <span id="like-count">...</span> SARAVÁS
+            </button>
         </div>
 
         <div class="section-box" id="quiz-area">
-            <h3 style="color:var(--dourado); font-size: 1.1rem; margin-top:0;">Qual Pombagira te rege hoje?</h3>
+            <h3>Regência do Dia</h3>
             <div id="quiz-content">
-                <button class="btn-main" onclick="carregarQuiz()">Iniciar Consulta</button>
+                <p style="font-size: 0.9rem; color: #bbb;">Qual arquétipo guia seus passos hoje?</p>
+                <button class="btn-main" onclick="carregarQuiz()">Consultar</button>
             </div>
         </div>
 
         <div class="section-box" id="area-testemunhos" style="display:none;">
-            <h3 style="color:var(--dourado); font-size: 1.1rem; margin-top:0;">Testemunhos de Fé</h3>
-            <div id="lista-depoimentos" style="text-align: left; font-size: 0.9rem;"></div>
+            <h3>Vozes de Axé</h3>
+            <div id="lista-depoimentos" style="text-align: left;"></div>
         </div>
 
         <div class="section-box">
-            <h4 style="margin:0 0 10px; font-size: 1rem;">Deixe seu relato</h4>
+            <h3>Relate sua Graça</h3>
             <input type="text" id="depo-nome" placeholder="Seu nome" class="quiz-opt">
-            <textarea id="depo-msg" placeholder="Como as Moças te ajudaram?" class="quiz-opt" style="height:70px;"></textarea>
+            <textarea id="depo-msg" placeholder="Como as Moças te ajudaram?" class="quiz-opt" style="height:80px;"></textarea>
             
             <div class="privacy-box">
                 <input type="checkbox" id="depo-publico" checked>
-                <label for="depo-publico">Autorizo publicar este relato no site.</label>
+                <label for="depo-publico">Autorizo publicar este relato na grade.</label>
             </div>
             
             <button class="btn-main" onclick="enviarDepoimento()">Enviar para a Grade</button>
-            <p id="depo-feedback" style="display:none; color:var(--dourado); font-size: 0.75rem; margin-top:10px;">Gratidão! Relatos autorizados passam por aprovação.</p>
         </div>
     </div>
 
     <footer>
         <div id="view-counter">Cruzando caminhos...</div>
         <div class="footer-social">
-            <a id="share-wa" href="#" target="_blank" title="Compartilhar no WhatsApp"> WhatsApp </a>
-            <a id="share-tg" href="#" target="_blank" title="Compartilhar no Telegram"> Telegram </a>
+            <a id="share-wa" href="#" target="_blank">WhatsApp</a>
+            <a id="share-tg" href="#" target="_blank">Telegram</a>
         </div>
-        <p style="margin-top:15px; opacity: 0.5;">Laroyê, Minha Senhora! ✨ 2026</p>
+        <p style="margin-top:25px; font-size: 0.7rem; opacity: 0.4; letter-spacing: 2px;">Laroyê, Minha Senhora! ✨ 2026</p>
     </footer>
 
     <script>
@@ -88,18 +153,17 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJieWd4a2Jld3prbnZqamh4ZHZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwMDcxNjQsImV4cCI6MjA4MTU4MzE2NH0.YrHF9HEGo6yv9MyNsPzFgBhaAB1DRh2SLU8f7L6s1nY';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // --- INICIALIZAÇÃO ---
-        async function iniciarSite() {
-            // Registrar Visita
+        async function iniciar() {
+            // Views
             const { data: v } = await _supabase.rpc('increment_page_view', { target_page: 'pombagiras' });
             if(v) document.getElementById('view-counter').innerText = `${v} caminhos cruzados por aqui`;
 
-            // Carregar Likes (usando a sua page_id: trans-pride-main)
+            // Likes (Usa o ID que está no seu print: trans-pride-main)
             const { data: l } = await _supabase.from('page_likes').select('likes').eq('page_id', 'trans-pride-main').single();
             if(l) document.getElementById('like-count').innerText = l.likes;
 
             carregarDepoimentos();
-            configurarLinksCompartilhamento();
+            configurarLinks();
         }
 
         async function darLike() {
@@ -112,65 +176,56 @@
             }
         }
 
-        // --- ORÁCULO ---
         async function obterMensagem(cor) {
             const display = document.getElementById('msg-display');
-            const texto = document.getElementById('msg-text');
             display.style.display = 'block';
-            texto.innerText = "Consultando...";
             let { data } = await _supabase.from('mensagens_oraculo').select('texto').eq('cor_rosa', cor).eq('ativa', true);
-            if(data && data.length > 0) texto.innerText = data[Math.floor(Math.random() * data.length)].texto;
+            if(data) document.getElementById('msg-text').innerText = data[Math.floor(Math.random() * data.length)].texto;
         }
 
-        // --- QUIZ ---
         let perguntas = [], etapa = 0, pontos = { rainha: 0, cigana: 0, calunga: 0 };
         async function carregarQuiz() {
             let { data } = await _supabase.from('perguntas_quiz').select('*').eq('ativa', true);
-            if(data) { perguntas = data; etapa = 0; pontos = { rainha: 0, cigana: 0, calunga: 0 }; mostrarPergunta(); }
+            if(data) { perguntas = data; etapa = 0; pontos = { rainha: 0, cigana: 0, calunga: 0 }; proxima(); }
         }
-        function mostrarPergunta() {
+        function proxima() {
             const area = document.getElementById('quiz-content');
             if (etapa < perguntas.length) {
                 let p = perguntas[etapa];
-                area.innerHTML = `<p style="font-size:0.9rem;">${p.pergunta}</p>` + 
+                area.innerHTML = `<p style="margin-bottom:15px;">${p.pergunta}</p>` + 
                 ['a','b','c'].map(l => `<button class="quiz-opt" onclick="votar('${p['ponto_'+l]}')">${p['opcao_'+l]}</button>`).join('');
-            } else { finalizarQuiz(); }
+            } else { 
+                let res = Object.keys(pontos).reduce((a, b) => pontos[a] > pontos[b] ? a : b);
+                area.innerHTML = `<h4>Sua regência: ${res.toUpperCase()}</h4><button class="btn-main" onclick="carregarQuiz()">Refazer</button>`;
+            }
         }
-        function votar(p) { pontos[p]++; etapa++; mostrarPergunta(); }
-        function finalizarQuiz() {
-            let res = Object.keys(pontos).reduce((a, b) => pontos[a] > pontos[b] ? a : b);
-            document.getElementById('quiz-content').innerHTML = `<h4 style="color:var(--dourado)">Regência: ${res.toUpperCase()}</h4><button class="btn-main" onclick="carregarQuiz()">Refazer Consulta</button>`;
-        }
+        function votar(p) { pontos[p]++; etapa++; proxima(); }
 
-        // --- DEPOIMENTOS ---
         async function enviarDepoimento() {
             const nome = document.getElementById('depo-nome').value;
             const msg = document.getElementById('depo-msg').value;
-            if(!nome || !msg) return alert("Por favor, preencha nome e mensagem.");
-            const { error } = await _supabase.from('depoimentos').insert([{ nome, mensagem: msg }]);
-            if(!error) {
-                document.getElementById('depo-nome').value = '';
-                document.getElementById('depo-msg').value = '';
-                document.getElementById('depo-feedback').style.display = 'block';
-            }
+            if(!nome || !msg) return alert("Preencha os campos.");
+            await _supabase.from('depoimentos').insert([{ nome, mensagem: msg }]);
+            alert("Gratidão! Seu relato foi enviado para moderação.");
+            document.getElementById('depo-nome').value = ''; document.getElementById('depo-msg').value = '';
         }
 
         async function carregarDepoimentos() {
             let { data } = await _supabase.from('depoimentos').select('nome, mensagem').eq('aprovado', true).order('criado_em', { ascending: false });
             if (data && data.length > 0) {
                 document.getElementById('area-testemunhos').style.display = 'block';
-                document.getElementById('lista-depoimentos').innerHTML = data.map(d => `<div style="border-bottom:1px solid #333; padding:12px 0;"><strong>${d.nome}</strong><br><em style="color:#ccc;">"${d.mensagem}"</em></div>`).join('');
+                document.getElementById('lista-depoimentos').innerHTML = data.map(d => `<div style="border-bottom:1px solid #333; padding:15px 0;"><strong>${d.nome}</strong><br><em style="color:#aaa; font-size:0.85rem;">"${d.mensagem}"</em></div>`).join('');
             }
         }
 
-        function configurarLinksCompartilhamento() {
+        function configurarLinks() {
             const url = encodeURIComponent(window.location.href);
-            const txt = encodeURIComponent("Encontrei um oráculo das Pombagiras incrível! Veja o seu conselho: ");
+            const txt = encodeURIComponent("Encontrei um oráculo incrível! Veja o seu conselho das Pombagiras: ");
             document.getElementById('share-wa').href = `https://api.whatsapp.com/send?text=${txt}%20${url}`;
             document.getElementById('share-tg').href = `https://t.me/share/url?url=${url}&text=${txt}`;
         }
 
-        iniciarSite();
+        iniciar();
     </script>
 </body>
 </html>
