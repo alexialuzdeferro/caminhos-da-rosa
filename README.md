@@ -1,51 +1,56 @@
-# 🌹 Caminhos da Rosa | Alexia Melusine
+# ✦ ALEXIA MELUSINE ✦
+### Rosa de Fogo ∞ Luz de Ferro
+**@almasdepombagira**
+
+![Alexia Melusine](https://rbygxkbewzknvjjhxdvw.supabase.co/storage/v1/object/public/fotos-horiz/Ogimage%20e%20Twitter%20Card.png)
+
+---
+
+## 🌹 ANATOMIA DO ABISMO: O PROJETO
+Este não é apenas um repositório, é um **Portal Visceral**. Sob a regência de **Alexia Melusine**, este projeto mundial de desmistificação utiliza a tecnologia e a arte para revelar a força do feminino proibido e a sabedoria das encruzilhadas. Através de narrativas intensas, estética abyssal e educação sagrada, conectamos a espiritualidade fluida ao futuro digital.
+
+> "Onde o ferro encontra a luz e a rosa encontra o fogo, o segredo é revelado."
+
+---
+
+## 🎙️ VOZES DAS SOMBRAS (PODCASTS & YOUTUBE)
+*Destaque para as produções audiovisuais de alta intensidade:*
+
+*   🎬 **YouTube Oficial:** [Assista ao Almas de Pomba-gira](https://www.youtube.com/@almasdepombagira) — O epicentro da estética visceral em movimento.
+*   🎧 **Limbo Sonoro — Anatomia do Abismo:** [Ouça no Spotify](https://open.spotify.com/show/0oeCL1QScD3v7dHeUvJjgJ) — Narrativas históricas e mergulhos no oculto.
+*   📻 **Podcast Secundário:** [Ouça no Spotify](https://open.spotify.com/show/6ahRd7QT2wcq7ldt5CJHZW) — Reflexões e diálogos das encruzilhadas.
+
+---
+
+## 🕸️ ECOSSISTEMA DIGITAL
+*A presença de Alexia Melusine expandida por todos os canais mundiais:*
+
+### ⚡ Social & Movimento
+*   **Instagram:** [@almasdepombagira](https://www.instagram.com/almasdepombagira/)
+*   **TikTok:** [@almasdepombagira](https://www.tiktok.com/@almasdepombagira?lang=pt-BR)
+*   **Kwai:** [@AlexiaRosadeFogo](https://www.kwai.com/@AlexiaRosadeFogo)
+*   **Threads:** [@almasdepombagira](https://www.threads.com/@almasdepombagira)
+
+### 🔮 Comunidade & Conexão
+*   **WhatsApp Channel:** [Entre no Canal](https://whatsapp.com/channel/0029VbBs2AnJkK7J9J0nLr2G)
+*   **Telegram:** [Pomba-giras Oficial](https://t.me/pomba_giras)
+*   **Discord:** [Vortex Visceral](https://discord.gg/gWZP8R7Dqu)
+
+### ✍️ Arte & Intelecto
+*   **Behance:** [Portfolio Alexia Melusine](https://www.behance.net/alexiamelusine)
+*   **Substack:** [Escritos Abissais](https://substack.com/@alexiamelusine)
+
+---
+
+## 🕯️ CONTATO DIRETO
+Para colaborações artísticas, projetos de IA vídeo ou diálogos sobre o sagrado:
+
+📧 **Email:** [alexiamelusine7@gmail.com](mailto:alexiamelusine7@gmail.com)
+🌍 **Portal Oficial:** [pombagiras.com](https://pombagiras.com)
+
+---
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/pombagiras/melusine/refs/heads/main/Al%C3%AA%20(3)%20(3)%20(1).png" width="300" style="border-radius: 50%; border: 3px solid #c5a059; box-shadow: 0 0 20px #4a0404;">
-  
-  ### **Criadora e Criatura: Alexia Melusine**
-  *"Em plena simbiose, alma livre e fluida. Onde o ferro encontra a rosa e o código encontra o Axé."*
+  <p><i>© 2026 - Todos os direitos ao Sagrado Feminino.</i></p>
+  <p><b>Laroyê. ✦ ☾ ✦</b></p>
 </div>
-
----
-
-## 🥀 Sobre o Projeto
-Este repositório guarda a essência do **Caminhos da Rosa**, um oráculo digital e enciclopédia sagrada dedicado às Senhoras Pombagiras. Um projeto que une desenvolvimento web moderno (HTML5, CSS3, JavaScript e Supabase) com a sabedoria ancestral das Moças.
-
-> **"Não é apenas código. É movimento, é proteção, é voz para quem tem fé."**
-
----
-
-## 🌙 Onde me encontrar (Minhas Redes)
-
-Conecte-se com a energia das Moças e acompanhe meus trabalhos em todas as plataformas:
-
-| Plataforma | Link Direto |
-| :--- | :--- |
-| **📸 Instagram** | [@almasdepombagira](https://www.instagram.com/almasdepombagira/) |
-| **🎵 TikTok** | [@almasdepombagira](https://www.tiktok.com/@almasdepombagira/) |
-| **🎥 YouTube** | [@almasdepombagira](https://www.youtube.com/@almasdepombagira) |
-| **🔥 Kwai** | [@AlexiaRosadeFogo](https://www.kwai.com/@AlexiaRosadeFogo) |
-| **💻 GitHub (Pessoal)** | [alexialuzdeferro](https://github.com/alexialuzdeferro) |
-| **🌹 GitHub (Org)** | [pombagiras](https://github.com/pombagiras) |
-
----
-
-## 🛠️ Tecnologias de Poder
-* **Front-end:** HTML5, CSS Místico e Vanilla JavaScript.
-* **Back-end:** Supabase (Banco de Dados em tempo real).
-* **Hospedagem:** GitHub Pages.
-* **Design:** Cinzel & Quicksand Fonts.
-
----
-
-## 📜 Laroyê!
-*"Que a rosa vermelha perfume seus caminhos e a navalha corte todo o mal que tentar se aproximar."*
-
-<div align="center">
-  <img src="https://img.shields.io/badge/Status-Ativo-success?style=for-the-badge&color=4a0404&labelColor=c5a059" />
-  <img src="https://img.shields.io/badge/Axé-100%25-red?style=for-the-badge&color=ff0000&labelColor=000000" />
-</div>
-
----
-<p align="center">Desenvolvido com devoção por Alexia Melusine ✨ 2026</p>
